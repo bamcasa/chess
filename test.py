@@ -1,0 +1,5 @@
+""""""
+qwr
+delattr(cxvz)
+adf
+""""""
