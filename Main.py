@@ -1,6 +1,5 @@
 import pygame
 import sys
-import pprint
 import numpy as np
 
 pygame.init()
@@ -14,7 +13,7 @@ class chessgame:
         self.click_x,self.click_y = 0,0
         self.turn = False #True : 검은색 False :하얀색
 
-
+        self.grey = (128,128,128,10)
         #self.background_image = [pygame.image.load("image/green.png"), pygame.image.load("image/white.png")]
 
         self.black_bishop = pygame.image.load("image/black_bishop.png")
@@ -129,14 +128,21 @@ class chessgame:
                     if self.board[i][j] == 0 and not(self.clicked):
                         print("공백")
                         return
-                    if self.board[i][j] > 0 and not(self.turn) or self.board[i][j] < 0 and self.turn:
-                        print("NO")
+                    if self.clicked:
+                        if self.board[self.click_x][self.click_y] > 0 and not (self.turn) or self.board[self.click_x][self.click_y] < 0 and self.turn:
+                            print("자신의 턴이 아님")
+                            return
+                    elif self.board[i][j] > 0 and not(self.turn) or self.board[i][j] < 0 and self.turn:
+                        print("자신의 턴이 아님")
                         return
                     if not(self.clicked):
                         self.click_x,self.click_y = i,j
                     x,y = i,j
         # turn True = 검은색 Fasle = 하얀색  양수 = 블랙  음수 = 화이트
         if self.clicked:
+            if self.click_x == x and self.click_y == y:
+                print("똑같은 곳 클릭")
+                return
             self.move(self.click_x,self.click_y,x,y)
             self.clicked = False
         else:
@@ -221,6 +227,9 @@ class chessgame:
         #print(black,white)
 
 
+    def test(self):
+        pygame.draw.circle(self.screen,self.grey,[300,300],40)
+
 
     def main(self):
         clock = pygame.time.Clock()
@@ -236,6 +245,7 @@ class chessgame:
             self.backgroud()
             self.chesspiece()
             self.game()
+            self.test()
             pygame.display.flip()
 
 if __name__ == "__main__":
