@@ -13,7 +13,6 @@ class chessgame:
         self.click_x,self.click_y = 0,0
         self.turn = False #True : 검은색 False :하얀색
 
-        self.grey = (128,128,128,10)
         #self.background_image = [pygame.image.load("image/green.png"), pygame.image.load("image/white.png")]
 
         self.black_bishop = pygame.image.load("image/black_bishop.png")
@@ -193,6 +192,19 @@ class chessgame:
                 #print("퀸")
                 self.screen.blit(self.white_queen, (y * 75, x * 75))
 
+    def showmove(self):
+        if self.clicked:
+            if abs(self.board[self.click_x][self.click_y]) == 6:
+                pygame.draw.circle(self.screen, (190, 190, 190),
+                                   ((self.click_y + 1) * 75 + 37, (self.click_x) * 75 + 37), 10)
+                pygame.draw.circle(self.screen, (190, 190, 190),
+                                   ((self.click_y - 1) * 75 + 37, (self.click_x) * 75 + 37), 10)
+                pygame.draw.circle(self.screen, (190, 190, 190),
+                                   ((self.click_y) * 75 + 37, (self.click_x +1 ) * 75 + 37), 10)
+                pygame.draw.circle(self.screen, (190, 190, 190),
+                                   ((self.click_y) * 75 + 37, (self.click_x - 1) * 75 + 37), 10)
+
+
     def move(self,x,y,new_x,new_y):
         self.board[new_x][new_y] = self.board[x][y]
         self.board[x][y] = 0
@@ -227,10 +239,6 @@ class chessgame:
         #print(black,white)
 
 
-    def test(self):
-        pygame.draw.circle(self.screen,self.grey,[300,300],40)
-
-
     def main(self):
         clock = pygame.time.Clock()
         while True:
@@ -243,9 +251,10 @@ class chessgame:
                     pos = pygame.mouse.get_pos()
                     self.click(pos)
             self.backgroud()
+            self.showmove()
             self.chesspiece()
             self.game()
-            self.test()
+
             pygame.display.flip()
 
 if __name__ == "__main__":
