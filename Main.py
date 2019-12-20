@@ -127,6 +127,10 @@ class chessgame:
                 if self.location[i][j].collidepoint(pos):
                     print(f"[{i},{j}]")
                     if self.board[i][j] == 0 and not(self.clicked):
+                        print("공백")
+                        return
+                    if self.board[i][j] > 0 and not(self.turn) or self.board[i][j] < 0 and self.turn:
+                        print("NO")
                         return
                     if not(self.clicked):
                         self.click_x,self.click_y = i,j
