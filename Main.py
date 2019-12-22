@@ -1,4 +1,5 @@
 import pygame
+import pprint
 import sys
 import numpy as np
 
@@ -65,6 +66,15 @@ class chessgame:
         self.board[7][4] = -6
 
         self.location = [[0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0]]
+
+        self.canmove = [[0,0,0,0,0,0,0,0],
 [0,0,0,0,0,0,0,0],
 [0,0,0,0,0,0,0,0],
 [0,0,0,0,0,0,0,0],
@@ -144,6 +154,8 @@ class chessgame:
                 return
             self.move(self.click_x,self.click_y,x,y)
             self.clicked = False
+            self.click_x = 0
+            self.click_y = 0
         else:
             self.clicked = True
 
@@ -192,17 +204,33 @@ class chessgame:
                 #print("퀸")
                 self.screen.blit(self.white_queen, (y * 75, x * 75))
 
+    def movemake(self,x,y):
+        print("x+1 = ",x+1,"x-1 = ",x-1,"y+1 = ",y+1,"y-1 = ",y-1)
+        if abs(self.board[x][y]) == 6:
+            if x+1 <= 7:
+                self.canmove[x + 1][y] = 1
+                if y+1 <= 7:
+                    self.canmove[x + 1][y + 1] = 1
+                if y-1 >=0:
+                    self.canmove[x + 1][y - 1] = 1
+            if x-1 >=0:
+                self.canmove[x - 1][y] = 1
+                if y+1 <= 7:
+                    self.canmove[x - 1][y + 1] = 1
+                    self.canmove[x][y + 1] = 1
+                if y-1 >=0:
+                    self.canmove[x - 1][y - 1] = 1
+                    self.canmove[x][y - 1] = 1
+
+            self.showmove()
+
     def showmove(self):
-        if self.clicked:
-            if abs(self.board[self.click_x][self.click_y]) == 6:
-                pygame.draw.circle(self.screen, (190, 190, 190),
-                                   ((self.click_y + 1) * 75 + 37, (self.click_x) * 75 + 37), 10)
-                pygame.draw.circle(self.screen, (190, 190, 190),
-                                   ((self.click_y - 1) * 75 + 37, (self.click_x) * 75 + 37), 10)
-                pygame.draw.circle(self.screen, (190, 190, 190),
-                                   ((self.click_y) * 75 + 37, (self.click_x +1 ) * 75 + 37), 10)
-                pygame.draw.circle(self.screen, (190, 190, 190),
-                                   ((self.click_y) * 75 + 37, (self.click_x - 1) * 75 + 37), 10)
+        for i in range(8):
+            for j in range(8):
+                if self.canmove[i][j] == 1:
+                    pygame.draw.circle(self.screen, (190, 190, 190),
+                                       (j * 75 + 37, i * 75 + 37), 10)
+                self.canmove[i][j] = 0
 
 
     def move(self,x,y,new_x,new_y):
@@ -251,8 +279,8 @@ class chessgame:
                     pos = pygame.mouse.get_pos()
                     self.click(pos)
             self.backgroud()
-            self.showmove()
             self.chesspiece()
+            self.movemake(self.click_x, self.click_y)
             self.game()
 
             pygame.display.flip()
