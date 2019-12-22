@@ -217,11 +217,12 @@ class chessgame:
                 self.canmove[x - 1][y] = 1
                 if y+1 <= 7:
                     self.canmove[x - 1][y + 1] = 1
-                    self.canmove[x][y + 1] = 1
                 if y-1 >=0:
                     self.canmove[x - 1][y - 1] = 1
-                    self.canmove[x][y - 1] = 1
-
+            if y + 1 <= 7:
+                self.canmove[x][y + 1] = 1
+            if y - 1 >= 0:
+                self.canmove[x][y - 1] = 1
             self.showmove()
 
     def showmove(self):
