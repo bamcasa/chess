@@ -205,6 +205,11 @@ class chessgame:
 
     def movemake(self,x,y):
         #print("x+1 = ",x+1,"x-1 = ",x-1,"y+1 = ",y+1,"y-1 = ",y-1)
+        if abs(self.board[x][y]) == 2:
+            for i in range(1,8):
+                self.canmove[x-i][y] = 1
+                self.canmove[x][y-i] = 1
+
         if abs(self.board[x][y]) == 6:
             if x+1 <= 7:
                 self.canmove[x + 1][y] = 1
