@@ -74,14 +74,7 @@ class chessgame:
 [0,0,0,0,0,0,0,0],
 [0,0,0,0,0,0,0,0]]
 
-        self.canmove = [[0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0]]
+        self.canmove = np.zeros((8,8))
 
         background_x = 0
         background_y = 0
@@ -152,12 +145,18 @@ class chessgame:
             if self.click_x == x and self.click_y == y:
                 print("똑같은 곳 클릭")
                 return
+            pprint.pprint(self.canmove)
+            if self.canmove[x][y] == 0:
+                print("움직일 수 없는 곳임")
+                return
             self.move(self.click_x,self.click_y,x,y)
+            self.canmove = np.zeros((8,8))
             self.clicked = False
             self.click_x = 0
             self.click_y = 0
         else:
             self.clicked = True
+            self.movemake(self.click_x, self.click_y)
 
     def show(self,x,y):# 1 : 폰 2 : 룩 3 : 나이트 4: 비숍 5: 킹 6 : 퀸
         if self.board[x][y] == 0:
@@ -205,7 +204,7 @@ class chessgame:
                 self.screen.blit(self.white_queen, (y * 75, x * 75))
 
     def movemake(self,x,y):
-        print("x+1 = ",x+1,"x-1 = ",x-1,"y+1 = ",y+1,"y-1 = ",y-1)
+        #print("x+1 = ",x+1,"x-1 = ",x-1,"y+1 = ",y+1,"y-1 = ",y-1)
         if abs(self.board[x][y]) == 6:
             if x+1 <= 7:
                 self.canmove[x + 1][y] = 1
@@ -223,7 +222,6 @@ class chessgame:
                 self.canmove[x][y + 1] = 1
             if y - 1 >= 0:
                 self.canmove[x][y - 1] = 1
-            self.showmove()
 
     def showmove(self):
         for i in range(8):
@@ -231,7 +229,6 @@ class chessgame:
                 if self.canmove[i][j] == 1:
                     pygame.draw.circle(self.screen, (190, 190, 190),
                                        (j * 75 + 37, i * 75 + 37), 10)
-                self.canmove[i][j] = 0
 
 
     def move(self,x,y,new_x,new_y):
@@ -281,10 +278,10 @@ class chessgame:
                     self.click(pos)
             self.backgroud()
             self.chesspiece()
-            self.movemake(self.click_x, self.click_y)
+            self.showmove()
             self.game()
 
-            pygame.display.flip()
+            pygame.display.update()
 
 if __name__ == "__main__":
     chessgame().main()
