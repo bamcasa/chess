@@ -38,8 +38,8 @@ class chessgame:
         for i in range(8):
             self.board[1][i] = 1
             self.board[6][i] = -1
-        black_pawns = np.array([False, False, False, False, False, False, False, False])
-        white_pawns = np.array([False, False, False, False, False, False, False, False])
+        #black_pawns = np.array([False, False, False, False, False, False, False, False])
+        #white_pawns = np.array([False, False, False, False, False, False, False, False])
 
         #룩
         self.board[0][0] = 2
@@ -191,7 +191,17 @@ class chessgame:
 
     def movemake(self,x,y):
         if abs(self.board[x][y]) == 1: #폰
-            pass
+            if x == 1 and self.board[x][y] > 0:
+                self.canmove[x+1][y] = 1
+                self.canmove[x+2][y] = 1
+            elif self.board[x][y] > 0:
+                self.canmove[x+1][y] = 1
+            if x == 6 and self.board[x][y] < 0:
+                self.canmove[x-1][y] = 1
+                self.canmove[x-2][y] = 1
+            elif self.board[x][y] < 0:
+                self.canmove[x-1][y] = 1
+
 
         if abs(self.board[x][y]) == 2: #룩
             for i in range(1,8):
