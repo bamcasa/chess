@@ -31,7 +31,7 @@ class chessgame:
         self.white_queen = pygame.image.load("image/white_queen.png")
 
         self.board = np.zeros((8,8))
-        # 1 : 폰 2 : 룩 3 : 나이트 4: 비숍 5: 킹 6 : 퀸
+        # 1 : 폰 2 : 룩 3 : 나이트 4: 비숍 5: 퀸 6 : 킹
         # 음수 : 화이트
 
         #폰
@@ -57,11 +57,11 @@ class chessgame:
         self.board[7][2] = -4
         self.board[7][5] = -4
 
-        #킹
+        #퀸
         self.board[0][3] = 5
         self.board[7][3] = -5
 
-        #퀸
+        #킹
         self.board[0][4] = 6
         self.board[7][4] = -6
 
@@ -117,7 +117,6 @@ class chessgame:
         #print(len(self.location))
 
     def chesspiece(self):
-        #pprint.pprint(self.board)
         for x in range(8):
             for y in range(8):
                 self.show(x, y)
@@ -158,58 +157,64 @@ class chessgame:
             self.clicked = True
             self.movemake(self.click_x, self.click_y)
 
-    def show(self,x,y):# 1 : 폰 2 : 룩 3 : 나이트 4: 비숍 5: 킹 6 : 퀸
+    def show(self,x,y):# 1 : 폰 2 : 룩 3 : 나이트 4: 비숍 6: 킹 5 : 퀸
         if self.board[x][y] == 0:
-            #print("공백")
             return
         elif self.board[x][y] > 0:
-            #print("블랙")
             if self.board[x][y] == 1:
-                #print("폰")
                 self.screen.blit(self.black_pawn,(y*75,x*75))
             elif self.board[x][y] == 2:
-                #print("룩")
                 self.screen.blit(self.black_rook, (y * 75, x * 75))
             elif self.board[x][y] == 3:
-                #print("나이트")
                 self.screen.blit(self.black_knight, (y * 75, x * 75))
             elif self.board[x][y] == 4:
-                #print("비숍")
                 self.screen.blit(self.black_bishop, (y * 75, x * 75))
             elif self.board[x][y] == 5:
-                #print("킹")
                 self.screen.blit(self.black_king,(y*75,x*75))
             elif self.board[x][y] == 6:
-                #print("퀸")
                 self.screen.blit(self.black_queen, (y * 75, x * 75))
         else :
-            #print("화이트")
             if self.board[x][y]*-1 == 1:
-                #print("폰")
                 self.screen.blit(self.white_pawn, (y * 75, x * 75))
             elif self.board[x][y]*-1 == 2:
-                #print("룩")
                 self.screen.blit(self.white_rook, (y * 75, x * 75))
             elif self.board[x][y]*-1 == 3:
-                #print("나이트")
                 self.screen.blit(self.white_knight, (y * 75, x * 75))
             elif self.board[x][y]*-1 == 4:
-                #print("비숍")
                 self.screen.blit(self.white_bishop, (y * 75, x * 75))
             elif self.board[x][y]*-1 == 5:
-                #print("킹")
                 self.screen.blit(self.white_king, (y * 75, x * 75))
             elif self.board[x][y]*-1 == 6:
-                #print("퀸")
                 self.screen.blit(self.white_queen, (y * 75, x * 75))
 
     def movemake(self,x,y):
-        #print("x+1 = ",x+1,"x-1 = ",x-1,"y+1 = ",y+1,"y-1 = ",y-1)
         if abs(self.board[x][y]) == 2: #룩
             for i in range(1,8):
                 self.canmove[x-i][y] = 1
                 self.canmove[x][y-i] = 1
 
+        if abs(self.board[x][y]) == 3: #나이트
+            if y-1 >= 0:
+                if x-2 >= 0:
+                    self.canmove[x - 2][y - 1] = 1
+                if x+2 <= 7:
+                    self.canmove[x + 2][y - 1] = 1
+            if y+1 <= 7:
+                if x-2 >= -1:
+                    self.canmove[x - 2][y + 1] = 1
+                if x+2 <= 7:
+                    self.canmove[x + 2][y + 1] = 1
+
+            if y-2 >= 0:
+                if x-1 >= 0:
+                    self.canmove[x - 1][y - 2] = 1
+                if x+1 <= 7:
+                    self.canmove[x + 1][y - 2] = 1
+            if y+2 <= 7:
+                if x-1 >= 0:
+                    self.canmove[x - 1][y + 2] = 1
+                if x+1 <= 7:
+                    self.canmove[x + 1][y + 2] = 1
         if abs(self.board[x][y]) == 4: #비숍
             for i in range(1,8):
                 if x-i <= -1 or y-i <= -1:
@@ -228,7 +233,29 @@ class chessgame:
                     break
                 self.canmove[x+i][y-i] = 1
 
-        if abs(self.board[x][y]) == 6: #퀸
+        if abs(self.board[x][y]) == 5: #퀸
+            for i in range(1,8):
+                if x-i <= -1 or y-i <= -1:
+                    break
+                self.canmove[x-i][y-i] = 1
+            for i in range(1,8):
+                if x+i >=8 or y+i >=8:
+                    break
+                self.canmove[x+i][y+i] = 1
+            for i in range(1,8):
+                if x-i <= -1 or y+i >=8:
+                    break
+                self.canmove[x-i][y+i] = 1
+            for i in range(1,8):
+                if x+i >= 8 or y-i <= -1:
+                    break
+                self.canmove[x+i][y-i] = 1
+            for i in range(1,8):
+                self.canmove[x-i][y] = 1
+                self.canmove[x][y-i] = 1
+
+
+        if abs(self.board[x][y]) == 6: #킹
             if x+1 <= 7:
                 self.canmove[x + 1][y] = 1
                 if y+1 <= 7:
