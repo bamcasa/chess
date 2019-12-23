@@ -12,7 +12,7 @@ class chessgame:
         self.font = pygame.font.SysFont("notosanscjkkr", 30)
         self.clicked = False
         self.click_x,self.click_y = 0,0
-        self.turn = False #True : 검은색 False :하얀색
+        self.turn = 1 #짝수 : 검은색 홀수 :하얀색
 
         #self.background_image = [pygame.image.load("image/green.png"), pygame.image.load("image/white.png")]
 
@@ -38,6 +38,8 @@ class chessgame:
         for i in range(8):
             self.board[1][i] = 1
             self.board[6][i] = -1
+        black_pawns = np.array([False, False, False, False, False, False, False, False])
+        white_pawns = np.array([False, False, False, False, False, False, False, False])
 
         #룩
         self.board[0][0] = 2
@@ -130,10 +132,10 @@ class chessgame:
                         print("공백")
                         return
                     if self.clicked:
-                        if self.board[self.click_x][self.click_y] > 0 and not (self.turn) or self.board[self.click_x][self.click_y] < 0 and self.turn:
+                        if self.board[self.click_x][self.click_y] > 0 and not (self.turn % 2 == 0) or self.board[self.click_x][self.click_y] < 0 and self.turn % 2 == 0:
                             print("자신의 턴이 아님")
                             return
-                    elif self.board[i][j] > 0 and not(self.turn) or self.board[i][j] < 0 and self.turn:
+                    elif self.board[i][j] > 0 and not(self.turn % 2 == 0) or self.board[i][j] < 0 and self.turn % 2 == 0:
                         print("자신의 턴이 아님")
                         return
                     if not(self.clicked):
@@ -188,6 +190,9 @@ class chessgame:
                 self.screen.blit(self.white_queen, (y * 75, x * 75))
 
     def movemake(self,x,y):
+        if abs(self.board[x][y]) == 1: #폰
+            pass
+
         if abs(self.board[x][y]) == 2: #룩
             for i in range(1,8):
                 self.canmove[x-i][y] = 1
@@ -284,10 +289,11 @@ class chessgame:
     def move(self,x,y,new_x,new_y):
         self.board[new_x][new_y] = self.board[x][y]
         self.board[x][y] = 0
-        self.turn = not(self.turn)
+        self.turn += 1
 
     def game(self):
-        if self.turn: #검은색
+        self.screen.blit(self.font.render(str(self.turn), True, (50, 255, 255)), (20, 20))
+        if self.turn % 2 == 0: #검은색
             self.screen.blit(self.font.render("BLACK TURN", True, (50, 255, 255)), (250, 20))
         else: #하얀색
             self.screen.blit(self.font.render("WHITE TURN", True, (50, 255, 255)), (250, 20))
