@@ -13,6 +13,9 @@ class chessgame:
         self.clicked = False
         self.click_x,self.click_y = 0,0
         self.turn = 1 #짝수 : 검은색 홀수 :하얀색
+        self.white_promotion = False
+        self.black_promotion = False
+        self.pos = 0
 
         #self.background_image = [pygame.image.load("image/green.png"), pygame.image.load("image/white.png")]
 
@@ -123,7 +126,9 @@ class chessgame:
             for y in range(8):
                 self.show(x, y)
 
-    def click(self,pos):
+    def click(self,pos):# 1 : 폰   2 : 룩    3 : 나이트     4: 비숍     6: 킹     5 : 퀸
+        if self.white_promotion or self.black_promotion:
+            return
         for i in range(8):
             for j in range(8):
                 if self.location[i][j].collidepoint(pos):
@@ -151,7 +156,6 @@ class chessgame:
                 print("움직일 수 없는 곳임")
                 return
             self.move(self.click_x,self.click_y,x,y)
-            self.canmove = np.zeros((8,8))
             self.clicked = False
             self.click_x = 0
             self.click_y = 0
@@ -301,6 +305,22 @@ class chessgame:
         self.board[new_x][new_y] = self.board[x][y]
         self.board[x][y] = 0
         self.turn += 1
+        self.canmove = np.zeros((8, 8))
+
+    def choice(self,pos,x,y):
+        if self.white_promotion:
+            if self.clicked_rook.collidepoint(pos):
+                self.board[x, y] = -2
+                self.white_promotion = False
+            elif self.clicked_knight.collidepoint(pos):
+                self.board[x, y] = -3
+                self.white_promotion = False
+            elif self.clicked_bishop.collidepoint(pos):
+                self.board[x, y] = -4
+                self.white_promotion = False
+            elif self.clicked_queen.collidepoint(pos):
+                self.board[x, y] = -5
+                self.white_promotion = False
 
     def game(self):
         self.screen.blit(self.font.render(str(self.turn), True, (50, 255, 255)), (20, 20))
@@ -310,17 +330,19 @@ class chessgame:
             self.screen.blit(self.font.render("WHITE TURN", True, (50, 255, 255)), (250, 20))
         for i in range(8):
             if self.board[0][i] == -1:
-                print("흰 폰이 끝에 다임")
+                #print("흰 폰이 끝에 다임")
                 pygame.draw.rect(self.screen, (190,190,190), [100, 200, 400, 200])
                 pygame.draw.rect(self.screen, (255,255,255), [100, 200, 400, 200], 5)
                 self.clicked_rook = self.screen.blit(self.white_rook,(115,235))
                 self.clicked_bishop = self.screen.blit(self.white_bishop,(215,235))
                 self.clicked_knight = self.screen.blit(self.white_knight,(315,235))
-                self.clicked_queen = self.screen.blit(self.white_queen,(415,235))
+                self.clicked_queen = self.screen.blit(self.white_king,(415,235))
                 self.screen.blit(self.font.render("ROOK", True, (0, 0, 0)), (115, 335))
                 self.screen.blit(self.font.render("BISHOP", True, (0, 0, 0)), (215, 335))
                 self.screen.blit(self.font.render("KNIGHT", True, (0, 0, 0)), (315, 335))
                 self.screen.blit(self.font.render("QUEEN", True, (0, 0, 0)), (415, 335))
+                self.white_promotion = True
+                self.choice(self.pos,0,i)
             if self.board[7][i] == 1:
                 print("검은 폰이 끝에 다임")
 
@@ -350,14 +372,15 @@ class chessgame:
     def main(self):
         clock = pygame.time.Clock()
         while True:
+            print(self.white_promotion)
             clock.tick(self.FPS)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    pos = pygame.mouse.get_pos()
-                    self.click(pos)
+                    self.pos = pygame.mouse.get_pos()
+                    self.click(self.pos)
             self.backgroud()
             self.chesspiece()
             self.showmove()
