@@ -201,6 +201,7 @@ class chessgame:
                 self.canmove[x-2][y] = 1
             elif self.board[x][y] < 0:
                 self.canmove[x-1][y] = 1
+            self.canmove[0][3] = 1
 
 
         if abs(self.board[x][y]) == 2: #룩
@@ -307,6 +308,21 @@ class chessgame:
             self.screen.blit(self.font.render("BLACK TURN", True, (50, 255, 255)), (250, 20))
         else: #하얀색
             self.screen.blit(self.font.render("WHITE TURN", True, (50, 255, 255)), (250, 20))
+        for i in range(8):
+            if self.board[0][i] == -1:
+                print("흰 폰이 끝에 다임")
+                pygame.draw.rect(self.screen, (190,190,190), [100, 200, 400, 200])
+                pygame.draw.rect(self.screen, (255,255,255), [100, 200, 400, 200], 5)
+                self.clicked_rook = self.screen.blit(self.white_rook,(115,235))
+                self.clicked_bishop = self.screen.blit(self.white_bishop,(215,235))
+                self.clicked_knight = self.screen.blit(self.white_knight,(315,235))
+                self.clicked_queen = self.screen.blit(self.white_queen,(415,235))
+                self.screen.blit(self.font.render("ROOK", True, (0, 0, 0)), (115, 335))
+                self.screen.blit(self.font.render("BISHOP", True, (0, 0, 0)), (215, 335))
+                self.screen.blit(self.font.render("KNIGHT", True, (0, 0, 0)), (315, 335))
+                self.screen.blit(self.font.render("QUEEN", True, (0, 0, 0)), (415, 335))
+            if self.board[7][i] == 1:
+                print("검은 폰이 끝에 다임")
 
         black = 0
         white = 0
@@ -328,7 +344,7 @@ class chessgame:
         else:
             self.screen.blit(self.font.render("BLACK WIN", True, (50, 255, 255)), (300, 250))
             #print("하얀 퀸 죽음 검은색 이김")
-        #print(black,white)
+        #print(black,white)\\\\
 
 
     def main(self):
