@@ -16,6 +16,7 @@ class chessgame:
         self.white_promotion = False
         self.black_promotion = False
         self.pos = 0
+        self.En_passant = [0,0]
 
         #self.background_image = [pygame.image.load("image/green.png"), pygame.image.load("image/white.png")]
 
@@ -151,11 +152,18 @@ class chessgame:
             if self.click_x == x and self.click_y == y:
                 print("똑같은 곳 클릭")
                 return
-            pprint.pprint(self.canmove)
+            #pprint.pprint(self.canmove)
             if self.canmove[x][y] == 0:
                 print("움직일 수 없는 곳임")
                 return
             self.move(self.click_x,self.click_y,x,y)
+            if self.En_passant[0] == x and self.En_passant[1] == y:
+                if x>=3:
+                    print("앙파상")
+                    self.board[self.En_passant[0]-1][self.En_passant[1]] = 0
+                elif x<=4:
+                    print("앙파상")
+                    self.board[self.En_passant[0]+1][self.En_passant[1]] = 0
             self.clicked = False
             self.click_x = 0
             self.click_y = 0
@@ -199,15 +207,44 @@ class chessgame:
                 self.canmove[x+1][y] = 1
                 self.canmove[x+2][y] = 1
             elif self.board[x][y] > 0:
+                if self.board[x][y-1] == -1 and x<=4:
+                    self.canmove[x+1][y-1] = 1
+                    self.En_passant[0] = x+1
+                    self.En_passant[1] = y-1
+                    #print("앙파상")
+                if self.board[x][y+1] == -1 and x<=4:
+                    self.canmove[x+1][y+1] = 1
+                    self.En_passant[0] = x+1
+                    self.En_passant[1] = y+1
+                    #print("앙파상")
+                if self.board[x+1][y+1] != 0:
+                    self.canmove[x+1][y+1] = 1
+                if self.board[x+1][y-1] != 0:
+                    self.canmove[x+1][y-1] = 1
+                if self.board[x+1][y] != 0:
+                    return
                 self.canmove[x+1][y] = 1
             if x == 6 and self.board[x][y] < 0:
                 self.canmove[x-1][y] = 1
                 self.canmove[x-2][y] = 1
             elif self.board[x][y] < 0:
+                if self.board[x][y-1] == 1 and x>=3:
+                    self.canmove[x-1][y-1] = 1
+                    self.En_passant[0] = x-1
+                    self.En_passant[1] = y-1
+                    #print("앙파상")
+                if self.board[x][y+1] == 1 and x>=3:
+                    self.canmove[x-1][y+1] = 1
+                    self.En_passant[0] = x-1
+                    self.En_passant[1] = y+1
+                    #print("앙파상")
+                if self.board[x-1][y+1] != 0:
+                    self.canmove[x-1][y+1] = 1
+                if self.board[x-1][y-1] != 0:
+                    self.canmove[x-1][y-1] = 1
+                if self.board[x-1][y] != 0:
+                    return
                 self.canmove[x-1][y] = 1
-            self.canmove[0][3] = 1
-
-
         if abs(self.board[x][y]) == 2: #룩
             for i in range(1,8):
                 self.canmove[x-i][y] = 1
@@ -321,6 +358,19 @@ class chessgame:
             elif self.clicked_queen.collidepoint(pos):
                 self.board[x, y] = -5
                 self.white_promotion = False
+        elif self.black_promotion:
+            if self.clicked_rook.collidepoint(pos):
+                self.board[x, y] = 2
+                self.black_promotion = False
+            elif self.clicked_knight.collidepoint(pos):
+                self.board[x, y] = 3
+                self.black_promotion = False
+            elif self.clicked_bishop.collidepoint(pos):
+                self.board[x, y] = 4
+                self.black_promotion = False
+            elif self.clicked_queen.collidepoint(pos):
+                self.board[x, y] = 5
+                self.black_promotion = False
 
     def game(self):
         self.screen.blit(self.font.render(str(self.turn), True, (50, 255, 255)), (20, 20))
@@ -344,7 +394,19 @@ class chessgame:
                 self.white_promotion = True
                 self.choice(self.pos,0,i)
             if self.board[7][i] == 1:
-                print("검은 폰이 끝에 다임")
+                #print("검은 폰이 끝에 다임")
+                pygame.draw.rect(self.screen, (190,190,190), [100, 200, 400, 200])
+                pygame.draw.rect(self.screen, (255,255,255), [100, 200, 400, 200], 5)
+                self.clicked_rook = self.screen.blit(self.black_rook,(115,235))
+                self.clicked_bishop = self.screen.blit(self.black_bishop,(215,235))
+                self.clicked_knight = self.screen.blit(self.black_knight,(315,235))
+                self.clicked_queen = self.screen.blit(self.black_king,(415,235))
+                self.screen.blit(self.font.render("ROOK", True, (0, 0, 0)), (115, 335))
+                self.screen.blit(self.font.render("BISHOP", True, (0, 0, 0)), (215, 335))
+                self.screen.blit(self.font.render("KNIGHT", True, (0, 0, 0)), (315, 335))
+                self.screen.blit(self.font.render("QUEEN", True, (0, 0, 0)), (415, 335))
+                self.black_promotion = True
+                self.choice(self.pos,7,i)
 
         black = 0
         white = 0
@@ -372,7 +434,7 @@ class chessgame:
     def main(self):
         clock = pygame.time.Clock()
         while True:
-            print(self.white_promotion)
+            #print(self.white_promotion)
             clock.tick(self.FPS)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
