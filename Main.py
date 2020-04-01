@@ -151,19 +151,16 @@ class chessgame:
         if self.clicked:
             if self.click_x == x and self.click_y == y:
                 print("똑같은 곳 클릭")
+                self.clicked = False
+                self.click_x = 0
+                self.click_y = 0
+                self.canmove = np.zeros((8, 8))
                 return
             #pprint.pprint(self.canmove)
             if self.canmove[x][y] == 0:
                 print("움직일 수 없는 곳임")
                 return
             self.move(self.click_x,self.click_y,x,y)
-            if self.En_passant[0] == x and self.En_passant[1] == y:
-                if x>=3:
-                    print("앙파상")
-                    self.board[self.En_passant[0]-1][self.En_passant[1]] = 0
-                elif x<=4:
-                    print("앙파상")
-                    self.board[self.En_passant[0]+1][self.En_passant[1]] = 0
             self.clicked = False
             self.click_x = 0
             self.click_y = 0
@@ -207,16 +204,6 @@ class chessgame:
                 self.canmove[x+1][y] = 1
                 self.canmove[x+2][y] = 1
             elif self.board[x][y] > 0:
-                if self.board[x][y-1] == -1 and x<=4:
-                    self.canmove[x+1][y-1] = 1
-                    self.En_passant[0] = x+1
-                    self.En_passant[1] = y-1
-                    #print("앙파상")
-                if self.board[x][y+1] == -1 and x<=4:
-                    self.canmove[x+1][y+1] = 1
-                    self.En_passant[0] = x+1
-                    self.En_passant[1] = y+1
-                    #print("앙파상")
                 if self.board[x+1][y+1] != 0:
                     self.canmove[x+1][y+1] = 1
                 if self.board[x+1][y-1] != 0:
@@ -228,16 +215,6 @@ class chessgame:
                 self.canmove[x-1][y] = 1
                 self.canmove[x-2][y] = 1
             elif self.board[x][y] < 0:
-                if self.board[x][y-1] == 1 and x>=3:
-                    self.canmove[x-1][y-1] = 1
-                    self.En_passant[0] = x-1
-                    self.En_passant[1] = y-1
-                    #print("앙파상")
-                if self.board[x][y+1] == 1 and x>=3:
-                    self.canmove[x-1][y+1] = 1
-                    self.En_passant[0] = x-1
-                    self.En_passant[1] = y+1
-                    #print("앙파상")
                 if self.board[x-1][y+1] != 0:
                     self.canmove[x-1][y+1] = 1
                 if self.board[x-1][y-1] != 0:
