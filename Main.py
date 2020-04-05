@@ -406,26 +406,113 @@ class chessgame:
                         break
 
         if abs(self.board[x][y]) == 5: #퀸
-            for i in range(1,8):
-                if x-i <= -1 or y-i <= -1:
-                    break
-                self.canmove[x-i][y-i] = 1
-            for i in range(1,8):
-                if x+i >=8 or y+i >=8:
-                    break
-                self.canmove[x+i][y+i] = 1
-            for i in range(1,8):
-                if x-i <= -1 or y+i >=8:
-                    break
-                self.canmove[x-i][y+i] = 1
-            for i in range(1,8):
-                if x+i >= 8 or y-i <= -1:
-                    break
-                self.canmove[x+i][y-i] = 1
-            for i in range(1,8):
-                self.canmove[x-i][y] = 1
-                self.canmove[x][y-i] = 1
+            if self.board[x][y] > 0: #블랙
+                for i in range(1, 8):
+                    if x - i <= -1 or y - i <= -1 or self.board[x-i][y-i] > 0:
+                        break
+                    self.canmove[x - i][y - i] = 1
+                    if self.board[x-i][y-i] != 0:
+                        break
+                for i in range(1, 8):
+                    if x + i >= 8 or y + i >= 8 or self.board[x+i][y+i] > 0:
+                        break
+                    self.canmove[x + i][y + i] = 1
+                    if self.board[x+i][y+i] != 0:
+                        break
+                for i in range(1, 8):
+                    if x - i <= -1 or y + i >= 8 or self.board[x-i][y+i] > 0:
+                        break
+                    self.canmove[x - i][y + i] = 1
+                    if self.board[x-i][y+i] != 0:
+                        break
+                for i in range(1, 8):
+                    if x + i >= 8 or y - i <= -1 or self.board[x+i][y-i] > 0:
+                        break
+                    self.canmove[x + i][y - i] = 1
+                    if self.board[x+i][y-i] != 0:
+                        break
+                for i in range(1,8): #위
+                    if x-i >= 0:
+                        if self.board[x-i][y] > 0 or x == 0:
+                            break
+                        self.canmove[x-i][y] = 1
+                        if self.board[x-i][y] != 0:
+                            break
+                for i in range(1,8): #아래
+                    if x+i <=7:
+                        if self.board[x+i][y] > 0 or x == 7:
+                            break
+                        self.canmove[x+i][y] = 1
+                        if self.board[x+i][y] != 0:
+                            break
+                for i in range(1,8): #왼쪽
+                    if y-i >= 0:
+                        if self.board[x][y-i] > 0 or y == 0:
+                            break
+                        self.canmove[x][y-i] = 1
+                        if self.board[x][y-i] != 0:
+                            break
+                for i in range(1,8): #오른쪽
+                    if y+i <= 7:
+                        if self.board[x][y+i] > 0 or y == 7:
+                            break
+                        self.canmove[x][y+i] = 1
+                        if self.board[x][y+i] != 0:
+                            break
 
+            if self.board[x][y] < 0: #화이트
+                for i in range(1, 8):
+                    if x - i <= -1 or y - i <= -1 or self.board[x-i][y-i] < 0:
+                        break
+                    self.canmove[x - i][y - i] = 1
+                    if self.board[x-i][y-i] != 0:
+                        break
+                for i in range(1, 8):
+                    if x + i >= 8 or y + i >= 8 or self.board[x+i][y+i] < 0:
+                        break
+                    self.canmove[x + i][y + i] = 1
+                    if self.board[x+i][y+i] != 0:
+                        break
+                for i in range(1, 8):
+                    if x - i <= -1 or y + i >= 8 or self.board[x-i][y+i] < 0:
+                        break
+                    self.canmove[x - i][y + i] = 1
+                    if self.board[x-i][y+i] != 0:
+                        break
+                for i in range(1, 8):
+                    if x + i >= 8 or y - i <= -1 or self.board[x+i][y-i] < 0:
+                        break
+                    self.canmove[x + i][y - i] = 1
+                    if self.board[x+i][y-i] != 0:
+                        break
+                for i in range(1,8): #위
+                    if x-i >= 0:
+                        if self.board[x-i][y] < 0 or x == 0:
+                            break
+                        self.canmove[x-i][y] = 1
+                        if self.board[x-i][y] != 0:
+                            break
+                for i in range(1,8): #아래
+                    if x+i <=7:
+                        if self.board[x+i][y] < 0 or x == 7:
+                            break
+                        self.canmove[x+i][y] = 1
+                        if self.board[x+i][y] != 0:
+                            break
+                for i in range(1,8): #왼쪽
+                    if y-i >= 0:
+                        if self.board[x][y-i] < 0 or y == 0:
+                            break
+                        self.canmove[x][y-i] = 1
+                        if self.board[x][y-i] != 0:
+                            break
+                for i in range(1,8): #오른쪽
+                    if y+i <= 7:
+                        if self.board[x][y+i] < 0 or y == 7:
+                            break
+                        self.canmove[x][y+i] = 1
+                        if self.board[x][y+i] != 0:
+                            break
 
         if abs(self.board[x][y]) == 6: #킹
             if x+1 <= 7:
