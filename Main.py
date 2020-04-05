@@ -353,22 +353,57 @@ class chessgame:
                             self.canmove[x + 1][y + 2] = 1
 
         if abs(self.board[x][y]) == 4: #비숍
-            for i in range(1,8):
-                if x-i <= -1 or y-i <= -1:
-                    break
-                self.canmove[x-i][y-i] = 1
-            for i in range(1,8):
-                if x+i >=8 or y+i >=8:
-                    break
-                self.canmove[x+i][y+i] = 1
-            for i in range(1,8):
-                if x-i <= -1 or y+i >=8:
-                    break
-                self.canmove[x-i][y+i] = 1
-            for i in range(1,8):
-                if x+i >= 8 or y-i <= -1:
-                    break
-                self.canmove[x+i][y-i] = 1
+            if self.board[x][y] > 0: #블랙
+                for i in range(1, 8):
+                    if x - i <= -1 or y - i <= -1 or self.board[x-i][y-i] > 0:
+                        break
+                    self.canmove[x - i][y - i] = 1
+                    if self.board[x-i][y-i] != 0:
+                        break
+                for i in range(1, 8):
+                    if x + i >= 8 or y + i >= 8 or self.board[x+i][y+i] > 0:
+                        break
+                    self.canmove[x + i][y + i] = 1
+                    if self.board[x+i][y+i] != 0:
+                        break
+                for i in range(1, 8):
+                    if x - i <= -1 or y + i >= 8 or self.board[x-i][y+i] > 0:
+                        break
+                    self.canmove[x - i][y + i] = 1
+                    if self.board[x-i][y+i] != 0:
+                        break
+                for i in range(1, 8):
+                    if x + i >= 8 or y - i <= -1 or self.board[x+i][y-i] > 0:
+                        break
+                    self.canmove[x + i][y - i] = 1
+                    if self.board[x+i][y-i] != 0:
+                        break
+
+            if self.board[x][y] < 0: #화이트
+                for i in range(1, 8):
+                    if x - i <= -1 or y - i <= -1 or self.board[x-i][y-i] < 0:
+                        break
+                    self.canmove[x - i][y - i] = 1
+                    if self.board[x-i][y-i] != 0:
+                        break
+                for i in range(1, 8):
+                    if x + i >= 8 or y + i >= 8 or self.board[x+i][y+i] < 0:
+                        break
+                    self.canmove[x + i][y + i] = 1
+                    if self.board[x+i][y+i] != 0:
+                        break
+                for i in range(1, 8):
+                    if x - i <= -1 or y + i >= 8 or self.board[x-i][y+i] < 0:
+                        break
+                    self.canmove[x - i][y + i] = 1
+                    if self.board[x-i][y+i] != 0:
+                        break
+                for i in range(1, 8):
+                    if x + i >= 8 or y - i <= -1 or self.board[x+i][y-i] < 0:
+                        break
+                    self.canmove[x + i][y - i] = 1
+                    if self.board[x+i][y-i] != 0:
+                        break
 
         if abs(self.board[x][y]) == 5: #퀸
             for i in range(1,8):
