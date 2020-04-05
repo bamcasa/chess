@@ -515,22 +515,57 @@ class chessgame:
                             break
 
         if abs(self.board[x][y]) == 6: #킹
-            if x+1 <= 7:
-                self.canmove[x + 1][y] = 1
-                if y+1 <= 7:
-                    self.canmove[x + 1][y + 1] = 1
-                if y-1 >=0:
-                    self.canmove[x + 1][y - 1] = 1
-            if x-1 >=0:
-                self.canmove[x - 1][y] = 1
-                if y+1 <= 7:
-                    self.canmove[x - 1][y + 1] = 1
-                if y-1 >=0:
-                    self.canmove[x - 1][y - 1] = 1
-            if y + 1 <= 7:
-                self.canmove[x][y + 1] = 1
-            if y - 1 >= 0:
-                self.canmove[x][y - 1] = 1
+            if self.board[x][y] > 0:  # 블랙
+                if x + 1 <= 7:
+                    if self.board[x + 1][y] <= 0:
+                        self.canmove[x + 1][y] = 1
+                    if y + 1 <= 7:
+                        if self.board[x + 1][y+1] <= 0:
+                            self.canmove[x + 1][y + 1] = 1
+                    if y - 1 >= 0:
+                        if self.board[x + 1][y-1] <= 0:
+                            self.canmove[x + 1][y - 1] = 1
+                if x - 1 >= 0:
+                    if self.board[x - 1][y] <= 0:
+                        self.canmove[x - 1][y] = 1
+                    if y + 1 <= 7:
+                        if self.board[x - 1][y+1] <= 0:
+                            self.canmove[x - 1][y + 1] = 1
+                    if y - 1 >= 0:
+                        if self.board[x - 1][y - 1] <= 0:
+                            self.canmove[x - 1][y - 1] = 1
+                if y + 1 <= 7:
+                    if self.board[x][y + 1] <= 0:
+                        self.canmove[x][y + 1] = 1
+                if y - 1 >= 0:
+                    if self.board[x][y - 1] <= 0:
+                        self.canmove[x][y - 1] = 1
+
+            if self.board[x][y] < 0:  # 화이트
+                if x + 1 <= 7:
+                    if self.board[x + 1][y] >= 0:
+                        self.canmove[x + 1][y] = 1
+                    if y + 1 <= 7:
+                        if self.board[x + 1][y+1] >= 0:
+                            self.canmove[x + 1][y + 1] = 1
+                    if y - 1 >= 0:
+                        if self.board[x + 1][y-1] >= 0:
+                            self.canmove[x + 1][y - 1] = 1
+                if x - 1 >= 0:
+                    if self.board[x - 1][y] >= 0:
+                        self.canmove[x - 1][y] = 1
+                    if y + 1 <= 7:
+                        if self.board[x - 1][y+1] >= 0:
+                            self.canmove[x - 1][y + 1] = 1
+                    if y - 1 >= 0:
+                        if self.board[x - 1][y - 1] >= 0:
+                            self.canmove[x - 1][y - 1] = 1
+                if y + 1 <= 7:
+                    if self.board[x][y + 1] >= 0:
+                        self.canmove[x][y + 1] = 1
+                if y - 1 >= 0:
+                    if self.board[x][y - 1] >= 0:
+                        self.canmove[x][y - 1] = 1
 
     def showmove(self):
         if self.clicked:
