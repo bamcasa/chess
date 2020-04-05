@@ -290,27 +290,68 @@ class chessgame:
                             break
 
         if abs(self.board[x][y]) == 3: #나이트
-            if y-1 >= 0:
-                if x-2 >= 0:
-                    self.canmove[x - 2][y - 1] = 1
-                if x+2 <= 7:
-                    self.canmove[x + 2][y - 1] = 1
-            if y+1 <= 7:
-                if x-2 >= -1:
-                    self.canmove[x - 2][y + 1] = 1
-                if x+2 <= 7:
-                    self.canmove[x + 2][y + 1] = 1
+            if self.board[x][y] > 0: #블랙
+                if y - 1 >= 0:
+                    if x - 2 >= 0:
+                        if self.board[x-2][y-1] <= 0:
+                            self.canmove[x - 2][y - 1] = 1
+                    if x + 2 <= 7:
+                        if self.board[x+2][y-1] <= 0:
+                            self.canmove[x + 2][y - 1] = 1
+                if y + 1 <= 7:
+                    if x - 2 >= -1:
+                        if self.board[x-2][y+1] <= 0:
+                            self.canmove[x - 2][y + 1] = 1
+                    if x + 2 <= 7:
+                        if self.board[x+2][y+1] <= 0:
+                            self.canmove[x + 2][y + 1] = 1
 
-            if y-2 >= 0:
-                if x-1 >= 0:
-                    self.canmove[x - 1][y - 2] = 1
-                if x+1 <= 7:
-                    self.canmove[x + 1][y - 2] = 1
-            if y+2 <= 7:
-                if x-1 >= 0:
-                    self.canmove[x - 1][y + 2] = 1
-                if x+1 <= 7:
-                    self.canmove[x + 1][y + 2] = 1
+                if y - 2 >= 0:
+                    if x - 1 >= 0:
+                        if self.board[x-1][y-2] <= 0:
+                            self.canmove[x - 1][y - 2] = 1
+                    if x + 1 <= 7:
+                        if self.board[x+1][y-2] <= 0:
+                            self.canmove[x + 1][y - 2] = 1
+                if y + 2 <= 7:
+                    if x - 1 >= 0:
+                        if self.board[x-1][y+2] <= 0:
+                            self.canmove[x - 1][y + 2] = 1
+                    if x + 1 <= 7:
+                        if self.board[x+1][y+2] <= 0:
+                            self.canmove[x + 1][y + 2] = 1
+
+            if self.board[x][y] < 0: #화이트
+                if y - 1 >= 0:
+                    if x - 2 >= 0:
+                        if self.board[x-2][y-1] >= 0:
+                            self.canmove[x - 2][y - 1] = 1
+                    if x + 2 <= 7:
+                        if self.board[x+2][y-1] >= 0:
+                            self.canmove[x + 2][y - 1] = 1
+                if y + 1 <= 7:
+                    if x - 2 >= -1:
+                        if self.board[x-2][y+1] >= 0:
+                            self.canmove[x - 2][y + 1] = 1
+                    if x + 2 <= 7:
+                        if self.board[x+2][y+1] >= 0:
+                            self.canmove[x + 2][y + 1] = 1
+
+                if y - 2 >= 0:
+                    if x - 1 >= 0:
+                        if self.board[x-1][y-2] >= 0:
+                            self.canmove[x - 1][y - 2] = 1
+                    if x + 1 <= 7:
+                        if self.board[x+1][y-2] >= 0:
+                            self.canmove[x + 1][y - 2] = 1
+                if y + 2 <= 7:
+                    if x - 1 >= 0:
+                        if self.board[x-1][y+2] >= 0:
+                            self.canmove[x - 1][y + 2] = 1
+                    if x + 1 <= 7:
+                        if self.board[x+1][y+2] >= 0:
+                            self.canmove[x + 1][y + 2] = 1
+
         if abs(self.board[x][y]) == 4: #비숍
             for i in range(1,8):
                 if x-i <= -1 or y-i <= -1:
